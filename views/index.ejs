@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <h1 class="text-2xl p-4 font-bold ">Zenvy</h1>
+    <div class=" flex gap-8  justify-between p-10 items-center mt-10">
+        <div class="m-4 bg-white px-10 py-10 ">
+            <h1 class="font-semibold text-2xl">Welcome to <span class=" text-blue-700 text-3xl font-bold">Zenvy</span></h1>
+            <h2 class="font-semibold">Create Your Account</h2>
+            <form class="flex flex-wrap m-2 gap-3" action="/users/register" method="post">
+                <input type="text" class="bg-zinc-100  mt-4 w-full px-5 py-1 rounded outline-none hover:border-2 transition duration-400 ease-in-out border-blue-500" placeholder="Full Name" name="fullname" />
+                <input type="text" class="bg-zinc-100  w-full px-5 py-1 rounded outline-none hover:border-2 transition duration-400 ease-in-out border-blue-500" placeholder="Email" name="email"/>
+                <input type="password" class="bg-zinc-100 w-full px-5 py-1 rounded outline-none hover:border-2  transition duration-400 ease-in-out border-blue-500" placeholder="Password"name="password" />
+                <input type="submit" class="px-5 py-2 mt-3 rounded-xl bg-blue-600 text-white font-semibold" value="Create Account"/>
+            </form>
+        </div>
+        <div class="m-4 bg-white px-10 py-10 ">
+            <h2 class="font-semibold text-2xl">LogIn Your Account</h2>
+            <form class="flex flex-wrap m-2 gap-3"action="/users/login" method="post">
+                <input name="email" type="text" class="bg-zinc-100 w-full px-5 py-1 rounded outline-none hover:border-2 transition duration-400 ease-in-out border-blue-500" placeholder="Email" />
+                <input type="password" class="bg-zinc-100 w-full px-5 py-1 rounded outline-none hover:border-2   transition duration-400 ease-in-out border-blue-500" placeholder="Password" name="password" />
+                <input  type="submit" class="px-5 py-2 mt-3 rounded-xl bg-blue-600 text-white font-semibold" value="Login" />
+            </form>
+        </div>
+    </div>
+</body>
+</html>

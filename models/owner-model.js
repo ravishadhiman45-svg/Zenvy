@@ -11,3 +11,4 @@ const ownerSchema = mongoose.Schema({
         default:[],
     }
 })
+module.exports = mongoose.model('owner',ownerSchema)

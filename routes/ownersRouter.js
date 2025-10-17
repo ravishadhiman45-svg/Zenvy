@@ -20,4 +20,8 @@ if(process.env.NODE_ENV === "development"){
 router.get('/',(req,res)=>{
     res.send('working Properly in owner router')
 })
+router.get('/admin',(req,res)=>{
+    res.render('createproduct')
+})
+
 module.exports = router;

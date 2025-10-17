@@ -7,7 +7,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <h1 class="text-2xl p-4 font-bold ">Zenvy</h1>
+    <%- include('partials/header') %>
+    <% if(error.length>0){ %>
+        <div class="absolute mt-4 top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500">
+            <span class="text-white mt-1 mb-1 inline-block">
+                <%= error[0] %>
+            </span>
+        </div>
+    <% }%>
+     <% if(success.length>0){ %>
+        <div class="absolute mt-4 top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-green-500">
+            <span class="text-white mt-1 mb-1 inline-block">
+                <%= success[0] %>
+            </span>
+        </div>
+    <% }%>
     <div class=" flex gap-8  justify-between p-10 items-center mt-10">
         <div class="m-4 bg-white px-10 py-10 ">
             <h1 class="font-semibold text-2xl">Welcome to <span class=" text-blue-700 text-3xl font-bold">Zenvy</span></h1>

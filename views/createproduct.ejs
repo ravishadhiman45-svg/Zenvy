@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Product</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body >
+
+  <%- include('partials/header') %>
+
+  
+  <div class="min-h-screen flex flex-col md:flex-row p-4 md:p-8">
+  
+    <aside class="w-full md:w-1/4 p-6 bg-white rounded-lg  mb-6 md:mb-0 md:mr-6">
+      <div class="mb-8">
+        <h2 class="font-semibold text-lg mb-3 text-gray-800">Collections</h2>
+        <ul class="space-y-2 text-gray-700">
+          <li><a href="#" class="hover:text-blue-600">All Products</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="flex-1 bg-white rounded-lg  p-6 md:p-10">
+      <h1 class="text-3xl font-bold mb-6 text-gray-800">Create New Product</h1>
+
+      <h2 class="text-2xl font-semibold mb-4 text-gray-700">Product Details</h2>
+      <form class="space-y-6">
+        <div>
+          <label class="text-lg font-semibold block mb-2 text-gray-800">Product Image</label>
+          <input
+            type="file"
+            class="block w-full file:py-1  rounded p-2  file:mr-3  file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-500"
+          />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            type="text"
+            class="px-4 py-2 w-full border-2 bg-gray-100 rounded border-gray-300 outline-none focus:border-blue-500"
+            name="productname"
+            placeholder="Product Name"
+          />
+          <input
+            type="text"
+            class="px-4 py-2 w-full border-2 bg-gray-100 rounded border-gray-300 outline-none focus:border-blue-500"
+            name="productprice"
+            placeholder="Product Price"
+          />
+          <input
+            type="text"
+            class="px-4 py-2 w-full border-2 bg-gray-100 rounded border-gray-300 outline-none focus:border-blue-500"
+            name="discountprice"
+            placeholder="Discount Price"
+          />
+        </div>
+
+        <div>
+          <label class="text-2xl font-semibold mb-3 block text-gray-800">Panel Details</label>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+            <input
+              type="text"
+              class="px-4 py-2 w-full border-2 bg-gray-100 rounded border-gray-300 outline-none focus:border-blue-500"
+              name="backgroundcolor"
+              placeholder="Background Color"
+            />
+            <input
+              type="text"
+              class="px-4 py-2 w-full border-2 bg-gray-100 rounded border-gray-300 outline-none focus:border-blue-500"
+              name="panelcolor"
+              placeholder="Panel Color"
+            />
+            <input
+              type="text"
+              class="px-4 py-2 w-full border-2 bg-gray-100 rounded border-gray-300 outline-none focus:border-blue-500"
+              name="textcolor"
+              placeholder="Text Color"
+            />
+          </div>
+        </div>
+
+        <div>
+          <input
+            type="submit"
+            class="py-3 px-6 bg-blue-700 rounded text-white font-semibold hover:bg-blue-600 transition"
+            value="Create New Product"
+          />
+        </div>
+      </form>
+    </main>
+  </div>
+</body>
+</html>

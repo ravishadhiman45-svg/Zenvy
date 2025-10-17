@@ -7,12 +7,14 @@ module.exports.registerUser = async function(req,res){
     try{
         const {error,value} = registerSchema.validate(req.body);
         if(error){
-            return res.status(400).json({ error: error.details[0].message });
+            req.flash("error", error.details[0].message);
+            return res.redirect("/");
         }
         const{fullname , email, password} = value;
         const user = await userModel.findOne({"email":email})
         if(user){
-            return res.status(201).send("You already have an account please login")
+             req.flash("error","You already have an account please login")
+             return res.redirect('/')
         }
         bcrypt.genSalt(10,function(err,salt){
             if(err){
@@ -29,7 +31,8 @@ module.exports.registerUser = async function(req,res){
                          })
                          const token = generateToken(userCreated)
                          res.cookie("token",token)
-                         res.send("user created succesfully")                
+                         req.flash("success","user created")
+                         return res.redirect('/')               
                     }
                 })
             }
@@ -43,25 +46,34 @@ module.exports.registerUser = async function(req,res){
 module.exports.loginUser = async function(req,res){
     const {error,value} = loginSchema.validate(req.body);
     if(error){
-      return res.status(400).json({ error: error.details[0].message })  
+     req.flash("error", error.details[0].message);
+     return res.redirect("/");  
     }
     const{email, password} = value;
     const user = await userModel.findOne({email:email})
-    console.log("User found:", user);
-    if(!user) return res.status(404).send("Email or Passsword Incorrect")
-        console.log("Plain password:", password);
-        console.log("Hashed password from DB:", user.password);
+    if(!user) {
+        req.flash("error","Email or Passsword Incorrect")
+        return res.redirect('/')
+    }
     bcrypt.compare(password,user.password,(err,result)=>{
     if(err){
-        res.send(err.message)
+        req.flash("error",err.message)
+        return res.redirect('/')
     }else{
         if(result){
             const token = generateToken(user);
-            res.cookie("token",token);
-            res.send("you logged in succesfully in your account")
+            res.cookie("token",token)
+            return res.redirect('/shop');
         }else{
-            res.status(404).send("Email or Passsword Incorrect")
+            req.flash("error","Email or Passsword Incorrect")
+            return res.redirect('/')
         }
     }
      })
+}
+
+module.exports.logoutUser = async function (req,res) {
+     res.clearCookie('token');
+     req.flash("success","User logout")
+     return res.redirect('/')
 }

@@ -9,8 +9,20 @@
 <body >
 
   <%- include('partials/header') %>
-
-  
+  <% if(error.length>0){ %>
+    <div class="absolute mt-4 top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500">
+        <span class="text-white mt-1 mb-1 inline-block">
+            <%= error[0] %>
+        </span>
+    </div>
+  <% }%>
+   <% if(success.length>0){ %>
+        <div class="absolute mt-4 top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-green-500">
+            <span class="text-white mt-1 mb-1 inline-block">
+                <%= success[0] %>
+            </span>
+        </div>
+    <% }%>
   <div class="min-h-screen flex flex-col md:flex-row p-4 md:p-8">
   
     <aside class="w-full md:w-1/4 p-6 bg-white rounded-lg  mb-6 md:mb-0 md:mr-6">
@@ -22,15 +34,16 @@
       </div>
     </aside>
 
-    <main class="flex-1 bg-white rounded-lg  p-6 md:p-10">
+    <main class="flex-1 bg-white rounded-lg  p-4 md:p-8">
       <h1 class="text-3xl font-bold mb-6 text-gray-800">Create New Product</h1>
 
       <h2 class="text-2xl font-semibold mb-4 text-gray-700">Product Details</h2>
-      <form class="space-y-6">
+      <form class="space-y-6"  action="/owners/product/create" method="post" enctype="multipart/form-data">
         <div>
           <label class="text-lg font-semibold block mb-2 text-gray-800">Product Image</label>
           <input
             type="file"
+            name="image"
             class="block w-full file:py-1  rounded p-2  file:mr-3  file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-500"
           />
         </div>
@@ -39,19 +52,19 @@
           <input
             type="text"
             class="px-4 py-2 w-full border-2 bg-gray-100 rounded border-gray-300 outline-none focus:border-blue-500"
-            name="productname"
+            name="name"
             placeholder="Product Name"
           />
           <input
             type="text"
             class="px-4 py-2 w-full border-2 bg-gray-100 rounded border-gray-300 outline-none focus:border-blue-500"
-            name="productprice"
+            name="price"
             placeholder="Product Price"
           />
           <input
             type="text"
             class="px-4 py-2 w-full border-2 bg-gray-100 rounded border-gray-300 outline-none focus:border-blue-500"
-            name="discountprice"
+            name="discount"
             placeholder="Discount Price"
           />
         </div>
@@ -62,19 +75,19 @@
             <input
               type="text"
               class="px-4 py-2 w-full border-2 bg-gray-100 rounded border-gray-300 outline-none focus:border-blue-500"
-              name="backgroundcolor"
+              name="bgColor"
               placeholder="Background Color"
             />
             <input
               type="text"
               class="px-4 py-2 w-full border-2 bg-gray-100 rounded border-gray-300 outline-none focus:border-blue-500"
-              name="panelcolor"
+              name="panelColor"
               placeholder="Panel Color"
             />
             <input
               type="text"
               class="px-4 py-2 w-full border-2 bg-gray-100 rounded border-gray-300 outline-none focus:border-blue-500"
-              name="textcolor"
+              name="textColor"
               placeholder="Text Color"
             />
           </div>

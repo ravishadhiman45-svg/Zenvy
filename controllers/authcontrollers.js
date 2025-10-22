@@ -32,7 +32,7 @@ module.exports.registerUser = async function(req,res){
                          const token = generateToken(userCreated)
                          res.cookie("token",token)
                          req.flash("success","user created")
-                         return res.redirect('/')               
+                         return res.redirect('/shop')               
                     }
                 })
             }

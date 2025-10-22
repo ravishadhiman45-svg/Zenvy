@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const ownerModel = require('../models/owner-model')
+const productsRouter = require('./productsRouter');
 if(process.env.NODE_ENV === "development"){
     router.post('/create',async(req,res)=>{
         const owners = await ownerModel.find();
@@ -17,11 +18,13 @@ if(process.env.NODE_ENV === "development"){
     })
 }
 
-router.get('/',(req,res)=>{
-    res.send('working Properly in owner router')
-})
+router.use('/product',productsRouter);
+
 router.get('/admin',(req,res)=>{
-    res.render('createproduct')
-})
+    let error = req.flash("error")
+    let success = req.flash("success")
+    res.render('createproduct',{error,success})
+}
+);
 
 module.exports = router;

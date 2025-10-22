@@ -8,10 +8,15 @@
 </head>
 <body>
 
-  <div class="flex justify-between items-center p-4  ">
+  
     <%- include('partials/header') %>
-    <%- include('partials/logout') %>
-  </div>
+   <% if(success.length>0){ %>
+        <div class="absolute mt-4 top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-green-500">
+            <span class="text-white mt-1 mb-1 inline-block">
+                <%= success[0] %>
+            </span>
+        </div>
+    <% }%>
 
  
   <div class="flex flex-col  md:flex-row p-6">
@@ -46,24 +51,29 @@
 
     <main class="flex-1">
       <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <% for(let i=0; i<8; i++){ %> 
-          <li>
-            <div class="bg-white rounded-xl shadow hover:shadow-lg transition duration-300">
-              <img src="/images/image.png" class="h-48 w-full object-cover rounded-t-xl" />
-              <div class="bg-yellow-200 flex justify-between items-center px-4 py-3 rounded-b-xl">
-                <div>
-                  <h1 class="font-semibold text-gray-800">Product name</h1>
-                  <h2 class="text-gray-600 text-sm">₹Product price</h2>
-                </div>
-                <button class="bg-white text-black text-2xl rounded-full w-10 h-10 flex items-center justify-center shadow">
-                  +
-                </button>
-              </div>
-            </div>
-          </li>
+       <% if(products.length === 0){ %>
+          <h1 class="text-2xl font-semibold">No Products Available</h1>
         <% } %>
-      </ul>
-    </main>
-  </div>
+        <% products.forEach(product => { %>
+         <li>
+           <div class="bg-[<%= product.bgColor %>] rounded-xl shadow hover:shadow-lg transition duration-300">
+             <img src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" class="h-52  w-full object-cover  rounded-t-xl " />
+             <div class="bg-[<%= product.panelColor %>] flex justify-between items-center px-4 py-3 rounded-b-xl">
+               <div class="text-[<%= product.textColor %>]">
+                 <h1 class="font-semibold"><%= product.name %></h1>
+                 <h2 class="text-sm line-through text-gray-500">₹<%= product.price %></h2>
+                 <h2 class="text-sm">₹<%= product.price-product.discount %></h2>
+               </div>
+               <button class="bg-white text-black text-2xl rounded-full w-10 h-10 flex items-center justify-center shadow">
+                 <a href="/addtocart/<%= product._id %>">+</a>
+               </button>
+             </div>
+           </div>
+         </li>
+      <%  }) %>
+       
+             </ul>
+           </main>
+         </div>
 </body>
 </html>

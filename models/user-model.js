@@ -1,19 +1,20 @@
+const { ref } = require('joi')
 const mongoose = require('mongoose')
 const userSchema = mongoose.Schema({
     fullname:String,
     email:String,
     password:String,
-    picture:String,
+    image:String,
     isadmin:Boolean,
     contact:Number,
     orders:{
         type:Array,
         default:[],
     },
-    cart :{
-        type:Array,
-        default:[],
-    }
+    cart :[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'product',
+    }]
 
 })
 

@@ -19,4 +19,5 @@ mongoose.connect(MONGO_URI)
     console.error("❌ MongoDB connection error:", err);
   });
 
+//   making chnages to test git
 module.exports = mongoose.connection;

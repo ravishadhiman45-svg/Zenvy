@@ -18,6 +18,13 @@ if(process.env.NODE_ENV === "development"){
     })
 }
 
+router.get('/',async(req,res)=>{
+    const owner = await ownerModel.find();
+    if(owner.length>0){
+        const ownerData = owner[0];
+         res.render('ownerPage',{owner:ownerData})
+    }
+});
 router.use('/product',productsRouter);
 
 router.get('/admin',(req,res)=>{

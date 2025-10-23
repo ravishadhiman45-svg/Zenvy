@@ -2,9 +2,6 @@ const express = require('express')
 const router = express.Router()
 const upload = require('../config/multer-config')
 const productModel = require('../models/product-model')
-router.get('/',(req,res)=>{
-    res.send("Working Properly in products router")
-})
 router.post('/create',upload.single('image'),async(req,res)=>{
     try{
         let {price,name, discount,bgColor, panelColor,textColor,} = req.body;

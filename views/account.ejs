@@ -13,7 +13,12 @@
   <div class="p-10 ml-6">
     <h1 class="text-4xl text-zinc-300">Hello <span class="text-3xl text-amber-500"><%= user.fullname %></span> </h1>
     <h1 class="text-xl mt-3">Email : <%= user.email %></h1>
-    <h1 class="text-xl mt-3 text-amber-500">Your cart have <span><%= user.cart.length %></span> products</h1>
+    <% if(user.cart.length===0){ %>
+      <h1 class="text-xl mt-3 text-zinc-400">Your cart is empty</h1>        
+    <% }  else{ %>
+           <h1 class="text-xl mt-3 text-amber-500">Your cart have <span><%= user.cart.length %></span> products</h1>
+    <% } %>
+    
   </div>
 </body>
 </html>

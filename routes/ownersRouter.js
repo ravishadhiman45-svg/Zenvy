@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router();
 const ownerModel = require('../models/owner-model')
 const productsRouter = require('./productsRouter');
+const productModel = require('../models/product-model')
 if(process.env.NODE_ENV === "development"){
     router.post('/create',async(req,res)=>{
         const owners = await ownerModel.find();
@@ -34,4 +35,13 @@ router.get('/admin',(req,res)=>{
 }
 );
 
+router.get('/deleteProduct',async(req,res)=>{
+    const products = await productModel.find();
+    res.render('deleteproduct',{products})
+})
+
+router.get('/deleteproduct/:productId',async(req,res)=>{
+    const products = await productModel.findByIdAndDelete(req.params.productId);
+    res.redirect('/owners/deleteProduct')
+})
 module.exports = router;

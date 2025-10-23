@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zenvy Shop</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-gray-600 text-white">
 
@@ -14,11 +15,28 @@
     <h1 class="text-4xl text-zinc-300">Hello <span class="text-3xl text-amber-500"><%= user.fullname %></span> </h1>
     <h1 class="text-xl mt-3">Email : <%= user.email %></h1>
     <% if(user.cart.length===0){ %>
-      <h1 class="text-xl mt-3 text-zinc-400">Your cart is empty</h1>        
+        <div class="flex items-center gap-3 mt-3">
+        <i data-lucide="shopping-cart" class="w-6 h-6 text-zinc-400 "></i>
+        <h1 class="text-xl  text-zinc-400">Your cart is empty</h1>  
+        </div>
+            
     <% }  else{ %>
            <h1 class="text-xl mt-3 text-amber-500">Your cart have <span><%= user.cart.length %></span> products</h1>
     <% } %>
+
+    <% if(user.wishlist.length === 0 ){ %>
+        <div class="flex items-center gap-3 mt-3">
+        <i data-lucide="heart" class="w-5 h-5 text-zinc-400"></i>
+        <h1 class="text-xl  text-zinc-400" >Your wishlist is empty</h1>
+        </div>
+        
+    <% } else {%>
+        <h1 class="text-xl mt-3 text-amber-500">Your Wishlist have <span><%= user.wishlist.length %></span>products</h1>
+        <% } %>
     
   </div>
+  <script>
+    lucide.createIcons();   
+  </script>
 </body>
 </html>

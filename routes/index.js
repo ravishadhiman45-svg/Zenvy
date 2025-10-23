@@ -30,31 +30,75 @@ router.get('/discounted', isLoggedIn, async (req, res) => {
 }
 )
 
-router.get('/addtocart/:productId',isLoggedIn , async(req,res) =>{
-    let user = await userModel.findOne({email:req.user.email})
-    if( user.cart.includes(req.params.productId)){
-        req.flash("error","Product already in cart")
-        return res.redirect('/shop')
-    }else{
-         user.cart.push(req.params.productId)
+router.get('/addtocart/:productId', isLoggedIn, async (req, res) => {
+  try {
+    const user = await userModel.findOne({ email: req.user.email });
+    const productId = req.params.productId;
+    const existingItem = user.cart.find(
+      (item) => item.product.toString() === productId
+    );
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+      req.flash("success", "Product quantity increased");
+    } else {
+      user.cart.push({ product: productId, quantity: 1 });
+      req.flash("success", "Product added to cart successfully");
     }
-    await user.save()
-    req.flash("success","Product added to cart successfully")
-    res.redirect('/shop')
-})
+
+    await user.save();
+    res.redirect('/shop');
+  } catch (error) {
+    console.error(error);
+    req.flash("error", "Something went wrong while adding to cart");
+    res.redirect('/shop');
+  }
+});
+
 router.get('/cart',isLoggedIn,async(req,res)=>{
-    let user = await userModel.findOne({email:req.user.email}).populate('cart')
+    let user = await userModel.findOne({email:req.user.email}).populate('cart.product')
     let totalBill = 0;
-    user.cart.forEach(product => {
-        const price = product.price || 0;
-        const discount = product.discount || 0
+    let finalBill = 0;
+    let quantity ;
+    user.cart.forEach(Element => {
+        quantity = Element.quantity;
+        const price = Element.product.price || 0;
+        const discount = Element.product.discount || 0
         const discountedPrice = price - discount;
         const finalPrice = discountedPrice + 20; 
-         totalBill += finalPrice;
+         finalBill += finalPrice;
+         totalBill = finalBill * quantity;
     });
-    res.render('cart',{user,totalBill})
+    res.render('cart',{user,totalBill,quantity})
 })
-
+router.get('/increase/:productId',isLoggedIn,async(req,res)=>{
+    try{
+        let user = await userModel.findOne({email:req.user.email})
+        let cartItem = user.cart.find(item => item.product.toString() === req.params.productId);    
+        if (cartItem) {
+            cartItem.quantity += 1;
+            await user.save();
+        }       
+        res.redirect('/cart')
+        }catch(err){
+            req.flash("error","Error in increasing quantity")
+            res.redirect('/cart')       
+        }
+})
+router.get('/decrease/:productId',isLoggedIn,async(req,res)=>{
+    try{
+        let user = await userModel.findOne({email:req.user.email})      
+        let cartItem = user.cart.find(item => item.product.toString() === req.params.productId);
+        if (cartItem && cartItem.quantity > 1) {
+            cartItem.quantity -= 1;
+            await user.save();
+        }   
+        res.redirect('/cart')
+        }catch(err){
+            req.flash("error","Error in decreasing quantity")
+            res.redirect('/cart')
+        }
+})
 router.get('/account',isLoggedIn,async(req,res)=>{
     let user = await userModel.findOne({email:req.user.email})
     res.render('account',{user})
@@ -80,7 +124,7 @@ router.get('/wishlist',isLoggedIn,async(req,res)=>{
 router.get('/delete/:productId',isLoggedIn,async(req,res)=>{
     try{
         let user = await userModel.findOne({email:req.user.email})
-        user.cart = user.cart.filter(productId => productId.toString() !== req.params.productId);
+        user.cart = user.cart.filter(item => item.product.toString() !== req.params.productId);
         await user.save();
         req.flash("success","Product removed from cart successfully")
         res.redirect('/cart')

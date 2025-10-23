@@ -12,8 +12,9 @@ const userSchema = mongoose.Schema({
         default:[],
     },
     cart :[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'product',
+        product:{type:mongoose.Schema.Types.ObjectId,
+        ref:'product'},
+        quantity:{type:Number,default:1},
     }],
     wishlist:[{
         type:mongoose.Schema.Types.ObjectId,

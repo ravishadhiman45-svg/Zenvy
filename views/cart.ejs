@@ -7,63 +7,80 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-gray-50 text-gray-800">
 
-  
+<body class="bg-gray-50 text-gray-800">
   <%- include('partials/header') %>
 
- 
   <section class="max-w-7xl mx-auto px-4 py-10 space-y-8">
-    <% if (user.cart.length === 0) { %>
+
+    <% if (!user.cart || user.cart.length === 0) { %>
       <h1 class="text-2xl text-zinc-500 font-semibold">Your cart is empty</h1>
+    <% } else { %>
+      <% user.cart.forEach((item) => { %>
+        <% if (!item.product) { return; } %> <!-- Skip missing products -->
+
+        <div class="flex flex-col md:flex-row md:items-start bg-[<%= item.product.bgColor || '#f4f4f4' %>] shadow-md rounded-lg overflow-hidden p-4 md:p-6 gap-6">
+
+          <!-- Product Image -->
+          <div class="flex flex-col md:flex-row md:items-center gap-4 md:w-2/3">
+            <div class="w-full md:w-48 h-48 bg-[<%= item.product.bgColor || '#e5e5e5' %>] rounded overflow-hidden flex items-center justify-center">
+              <% if (item.product.image) { %>
+                <img src="data:image/jpeg;base64,<%= item.product.image.toString('base64') %>" alt="Product Image" class="w-full h-full object-cover" />
+              <% } else { %>
+                <span class="text-gray-500">No Image</span>
+              <% } %>
+            </div>
+
+            <!-- Product Details -->
+            <div class="flex-1 space-y-3">
+              <h2 class="text-xl font-semibold"><%= item.product.name %></h2>
+
+              <!-- Quantity Controls -->
+              <div class="flex items-center gap-3">
+                <a href="/decrease/<%= item.product._id %>" class="bg-white text-black text-2xl rounded-full w-10 h-10 flex items-center justify-center border shadow">-</a>
+                <p class="text-lg font-medium"><%= item.quantity %></p>
+                <a href="/increase/<%= item.product._id %>" class="bg-white text-black text-2xl rounded-full w-10 h-10 flex items-center justify-center border shadow">+</a>
+              </div>
+
+              <!-- Price Info -->
+              <div class="flex items-center gap-6 mt-2">
+                <label class="font-medium">Net Total</label>
+                <span class="font-semibold text-lg text-gray-900">
+                  ₹<%= (item.product.price - item.product.discount + 20) * item.quantity %>
+                </span>
+
+                <a href="/delete/<%= item.product._id %>" class="text-red-500 hover:text-red-700 flex items-center gap-1">
+                  <i data-lucide="trash-2" class="w-5 h-5"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Price Breakdown -->
+          <div class="flex-1 bg-[<%= item.product.panelColor || '#fff' %>] rounded-lg p-6 space-y-3 text-[<%= item.product.textColor || '#000' %>]">
+            <h3 class="text-lg font-semibold border-b pb-2">Price Breakdown</h3>
+            <p>Total MRP - <span class="font-medium">₹<%= item.product.price %></span></p>
+            <p>Discount - <span class="font-medium text-black">₹<%= item.product.discount %></span></p>
+            <p>Platform Fees - <span class="font-medium">₹20</span></p>
+            <p>Shipping - <span class="font-medium text-black">FREE</span></p>
+          </div>
+
+        </div>
+      <% }) %>
     <% } %>
-    <% user.cart.forEach((item)=>{ %>
-        <div class="flex flex-col md:flex-row md:items-start bg-[<%= item.product.bgColor %>] shadow-md rounded-lg overflow-hidden p-4 md:p-6 gap-6">
-
-      <div class="flex flex-col md:flex-row md:items-center gap-4 md:w-2/3">
-        <div class="w-full md:w-48 h-48 bg-[<%= item.product.bgColor %>] rounded overflow-hidden">
-          <img src="data:image/jpeg;base64,<%= item.product.image.toString('base64') %>" alt="Product Image" class="w-full h-full object-cover">
-        </div>
-
-        <div class="flex-1 space-y-3">
-          <h2 class="text-xl font-semibold"><%= item.product.name %></h2>
-          <div class="flex items-center gap-3">
-            <button class="bg-white text-black text-2xl rounded-full w-10 h-10 flex items-center justify-center border shadow"><a href="/decrease/<%= item.product._id %>">-</a></button>
-            <p class="text-lg"><%= item.quantity %></p>
-            <button class="bg-white text-black text-2xl rounded-full w-10 h-10 flex items-center justify-center border shadow"><a href="/increase/<%= item.product._id %>">+</a></button>
-          </div>
-
-          <div class="flex items-center gap-6  mt-2">
-            <label class="font-medium">Net Total</label>
-            <span class="font-semibold text-lg text-gray-900">₹<%=  (item.product.price-item.product.discount+20)*item.quantity %></span>
-            <button class=" flex items-center gap-1"><a href="/delete/<%= item.product._id %>"><i data-lucide="trash-2" class="text-zinc-900 w-5 h-5" type="button"></i></a></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex-1 bg-[<%= item.product.panelColor %>] rounded-lg p-6 space-y-3 text-[<%= item.product.textColor %>]">
-        <h3 class="text-lg font-semibold border-b pb-2">Price Breakdown</h3>
-        <p>Total MRP - <span class="font-medium">₹<%= item.product.price %> </span></p>
-        <p>Discount - <span class="font-medium text-black">₹<%= item.product.discount %></span></p>
-        <p>Platform Fees - <span class="font-medium">₹20</span></p>
-        <p>Shipping - <span class="font-medium text-black">FREE</span></p>
-      </div>
-    </div>
-   <% }) %>
-
-     
 
   </section>
 
-  
+  <!-- Footer -->
   <footer class="border-t bg-white py-4 px-6">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
       <h2 class="text-xl font-semibold">Total Amount:</h2>
       <span class="text-2xl font-bold text-gray-900">₹<%= totalBill %></span>
     </div>
   </footer>
+
   <script>
-  lucide.createIcons();
+    lucide.createIcons();
   </script>
 </body>
 </html>

@@ -55,22 +55,38 @@ router.get('/addtocart/:productId', isLoggedIn, async (req, res) => {
   }
 });
 
-router.get('/cart',isLoggedIn,async(req,res)=>{
-    let user = await userModel.findOne({email:req.user.email}).populate('cart.product')
+router.get('/cart', isLoggedIn, async (req, res) => {
+  try {
+    // Fetch user and populate products inside cart
+    const user = await userModel
+      .findOne({ email: req.user.email })
+      .populate('cart.product');
+
+    if (!user || !user.cart || user.cart.length === 0) {
+      return res.render('cart', { user: { cart: [] }, totalBill: 0, quantity: 0 });
+    }
+
     let totalBill = 0;
-    let finalBill = 0;
-    let quantity ;
-    user.cart.forEach(Element => {
-        quantity = Element.quantity;
-        const price = Element.product.price || 0;
-        const discount = Element.product.discount || 0
-        const discountedPrice = price - discount;
-        const finalPrice = discountedPrice + 20; 
-         finalBill += finalPrice;
-         totalBill = finalBill * quantity;
+
+    user.cart.forEach((item) => {
+      if (!item.product) return; // skip if product was deleted
+      const price = item.product.price || 0;
+      const discount = item.product.discount || 0;
+      const finalPrice = (price - discount + 20) * (item.quantity || 1);
+      totalBill += finalPrice;
     });
-    res.render('cart',{user,totalBill,quantity})
-})
+
+    res.render('cart', {
+      user,
+      totalBill,
+      quantity: user.cart.reduce((sum, item) => sum + (item.quantity || 0), 0),
+    });
+  } catch (err) {
+    console.error('Error loading cart:', err);
+    res.status(500).render('error', { message: 'Internal Server Error' });
+  }
+});
+
 router.get('/increase/:productId',isLoggedIn,async(req,res)=>{
     try{
         let user = await userModel.findOne({email:req.user.email})

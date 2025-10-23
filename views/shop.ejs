@@ -7,40 +7,32 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-gray-50">
+<body>
 
-  <!-- Header -->
-  <%- include('partials/header') %>
-
-  <!-- Success / Error Messages -->
-  <% if(success.length > 0){ %>
-    <div class="fixed z-50 mt-4 top-5 left-1/2 -translate-x-1/2 p-3 rounded-md bg-green-500 shadow">
-      <span class="text-white"><%= success[0] %></span>
+    <%- include('partials/header') %>
+   <% if(success.length>0){ %>
+        <div class="absolute mt-4 top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-green-500">
+            <span class="text-white mt-1 mb-1 inline-block">
+                <%= success[0] %>
+            </span>
+        </div>
+    <% }%>
+      <% if(error.length>0){ %>
+    <div class="absolute mt-4 top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500">
+        <span class="text-white mt-1 mb-1 inline-block">
+            <%= error[0] %>
+        </span>
     </div>
-  <% } %>
-  <% if(error.length > 0){ %>
-    <div class="fixed z-50 mt-4 top-5 left-1/2 -translate-x-1/2 p-3 rounded-md bg-red-500 shadow">
-      <span class="text-white"><%= error[0] %></span>
-    </div>
-  <% } %>
+  <% }%>
 
-  <!-- Page Layout -->
-  <div class="flex flex-col md:flex-row p-4 md:p-6 gap-6 relative">
-
-    <!-- Mobile Filter Button -->
-    <button id="filterToggle" class="md:hidden mb-4 flex items-center justify-center gap-2 px-4 py-2 bg-black text-white rounded-lg w-full">
-      <i data-lucide="filter"></i> Filters
-    </button>
-
-    <!-- Sidebar / Filters -->
-    <aside id="filterPanel"
-      class="hidden md:block md:sticky md:top-4 bg-white rounded-lg p-4 md:w-1/4 shadow h-fit md:self-start transition-all duration-300">
-
-      <!-- Sort -->
+ 
+  <div class="flex flex-col  md:flex-row p-6">
+    <aside class="w-full md:w-1/4 p-4 bg-white rounded-lg mb-6 md:mb-0 md:mr-6">
+    
       <form class="mb-8">
         <label class="block text-gray-700 font-semibold mb-2">Sort by:</label>
-        <select name="sort" id="sort" onchange="this.form.submit()" class="border border-gray-300 rounded w-full p-2">
-          <option value="">Sort</option>
+        <select name="sort" id="sort" onclick="sortProducts" onchange="this.form.submit()"   class="border border-gray-300 rounded w-full p-2">
+           <option value="">Sort</option>
           <option value="price">Price: Low to High</option>
           <option value="-price">Price: High to Low</option>
           <option value="name">Name: A → Z</option>
@@ -48,70 +40,56 @@
         </select>
       </form>
 
-      <!-- Collections -->
       <div class="mb-8">
         <h2 class="font-semibold text-lg mb-3">Collections</h2>
         <ul class="space-y-2 text-gray-600">
-          <li><a href="/shop" class="hover:text-black">All Products</a></li>
-          <li><a href="/discounted" class="hover:text-black">Discounted Products</a></li>
+          <li><a href="/shop">All Products</a></li>
+          <li><a href="/discounted">Discounted Products</a></li>
         </ul>
       </div>
 
-      <!-- Filter -->
       <div>
         <h2 class="font-semibold text-lg mb-3">Filter</h2>
         <ul class="space-y-2 text-gray-600">
-          <li><a href="/discounted" class="hover:text-black">Discount</a></li>
+          <li><a href="/discounted">Discount</a></li>
         </ul>
       </div>
     </aside>
 
-    <!-- Main Product Section -->
     <main class="flex-1">
       <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <% if(products.length === 0){ %>
+       <% if(products.length === 0){ %>
           <h1 class="text-2xl font-semibold">No Products Available</h1>
         <% } %>
         <% products.forEach(product => { %>
-          <li>
-            <div class="bg-[<%= product.bgColor %>] rounded-xl shadow hover:shadow-lg transition duration-300">
-              <img src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" class="h-52 w-full object-cover rounded-t-xl" />
-              <div class="bg-[<%= product.panelColor %>] flex justify-between items-center px-4 py-3 rounded-b-xl">
-                <div class="text-[<%= product.textColor %>]">
-                  <h1 class="font-semibold"><%= product.name %></h1>
-                  <h2 class="text-sm line-through text-gray-500">₹<%= product.price %></h2>
-                  <h2 class="text-sm">₹<%= product.price - product.discount %></h2>
-                </div>
-                <div class="flex gap-2">
-                  <a href="/wishlist/<%= product._id %>" class="text-red-500 hover:text-red-700 flex items-center gap-1">
-                    <i data-lucide="heart" class="cursor-pointer"></i>
-                  </a>
-                  <a href="/addtocart/<%= product._id %>" class="bg-white text-black text-2xl rounded-full w-10 h-10 flex items-center justify-center shadow hover:scale-105 transition">+</a>
-                </div>
-              </div>
-            </div>
-          </li>
-        <% }) %>
-      </ul>
-    </main>
-  </div>
-
-  <script>
-    lucide.createIcons();
-
-    // Mobile filter toggle
-    const toggleBtn = document.getElementById('filterToggle');
-    const panel = document.getElementById('filterPanel');
-
-    toggleBtn.addEventListener('click', () => {
-      panel.classList.toggle('hidden');
-      panel.classList.toggle('absolute');
-      panel.classList.toggle('top-20');
-      panel.classList.toggle('left-0');
-      panel.classList.toggle('w-full');
-      panel.classList.toggle('z-40');
-      panel.classList.toggle('shadow-lg');
-    });
-  </script>
+         <li>
+           <div class="bg-[<%= product.bgColor %>] rounded-xl shadow hover:shadow-lg transition duration-300">
+             <img src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" class="h-52  w-full object-cover  rounded-t-xl " />
+             <div class="bg-[<%= product.panelColor %>] flex justify-between items-center px-4 py-3 rounded-b-xl">
+               <div class="text-[<%= product.textColor %>]">
+                 <h1 class="font-semibold"><%= product.name %></h1>
+                 <h2 class="text-sm line-through text-gray-500">₹<%= product.price %></h2>
+                 <h2 class="text-sm">₹<%= product.price-product.discount %></h2>
+               </div>
+               <div class="flex gap-2">
+                <button class="text-red-500 hover:text-red-700 flex items-center gap-1"><a href="/wishlist/<%= product._id %>"><i data-lucide="heart" class="text-white cursor-pointer" type="button"></i></a></button>
+               <button class="bg-white text-black text-2xl rounded-full w-10 h-10 flex items-center justify-center shadow">
+                 <a href="/addtocart/<%= product._id %>">+</a>
+               </button>
+               </div> 
+             </div>
+           </div>
+         </li>
+      <%  }) %>
+       
+             </ul>
+           </main>
+         </div>
+         <script>
+         lucide.createIcons();
+         </script>
 </body>
 </html>
+
+
+
